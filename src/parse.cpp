@@ -354,14 +354,23 @@ NbtPayload * NbtTag::readPayload(NbtTagType type, std::istream *file) {
 	return payload;
 }
 
-// free compound, list or array
-// TODO add missing NBT types
+// free string, compound, list or array before deleting payload pointer
 void NbtTag::safeRemovePayload() {
 	if (payload != 0) {
-		if (type == tagTypeCompound) {
+		if (type == tagTypeString) {
+			delete[] payload->tagString;
+		}
+		else if (type == tagTypeCompound) {
 			for (int i = 0; i < payload->tagCompound->size(); i++)
 				delete payload->tagCompound->at(i);
 			delete payload->tagCompound;
+		}
+		else if (type == tagTypeList
+				|| type == tagTypeByteArray
+				|| type == tagTypeIntArray) {
+			for (int i = 0; i < payload->tagList.size; i++)
+				delete payload->tagList.values[i];
+			delete[] payload->tagList.values;
 		}
 		delete payload;
 	}

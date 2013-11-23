@@ -1,0 +1,8 @@
+*.sh
+bin/*
+obj/*
+testdata/*
+Web/*
+old/*
+CB/*
+

@@ -1,8 +1,11 @@
 *.sh
+*.swp
+*.old
+*.backup
 bin/*
 obj/*
 testdata/*
+CB/*
 Web/*
 old/*
-CB/*
 

@@ -7,6 +7,7 @@
 
 #include "NbtTag.h"
 
+//#define DEBUG if (1)
 #ifndef DEBUG
 #define DEBUG if (0)
 #endif
@@ -22,28 +23,15 @@ NbtTag::~NbtTag() {
     safeRemovePayload();
 }
 
-// read file, output tree
-void NbtTag::loadFromFile(char *path, bool gzipped) {
-    printf("\nReading file '%s'...\n", path);
-    DEBUG {
-        printf("\nDebugging only, don't look!\n");
-        gzifstream *file = new gzifstream;
-        file->open(path);
-        for (int i = 0; i < 64; i++) {
-            if (i%16 == 0) printf("\n");
-            char c = file->get();
-            printf("%2x ", c);
-        }
-        file->close();
-        delete file;
-        printf("\n\nFile reading successful.\n\n");
-    }
+// read file
+bool NbtTag::loadFromFile(char *path, bool gzipped) {
+    printf("Reading file '%s'...\n", path);
     if (gzipped) {
         gzifstream *file = new gzifstream;
         file->open(path);
         if (!file->is_open()) {
             printf("ERROR: Could not open file\n");
-            return;
+            return false;
         }
         readTag(file);
         file->close();
@@ -54,13 +42,14 @@ void NbtTag::loadFromFile(char *path, bool gzipped) {
         file->open(path);
         if (!file->is_open()) {
             printf("ERROR: Could not open file\n");
-            return;
+            return false;
         }
         readTag(file);
         file->close();
         delete file;
     }
-    printf("File reading successful.\n\n");
+    printf("File reading successful.\n");
+    return true;
 }
 
 // read type from stream
@@ -95,11 +84,74 @@ NbtTagType NbtTag::readTag(std::istream *file) {
 
 // print tree
 // indent with with <depth*2> spaces
-void NbtTag::printTag(unsigned int depth) {
+void NbtTag::printTag(unsigned int depth) const {
     printPayload(type, payload, depth);
 }
 
-void NbtTag::printPayload(NbtTagType type, NbtPayload* payload, unsigned int depth) {
+char* NbtTag::getName() const {
+    return name;
+}
+
+// get NbtTag at the given path
+// return 0 on error
+// format: "root.firstLevel.secondLevel"
+NbtTag* NbtTag::getTagAt(char* path) {
+    DEBUG printf("getTagAt: %s\n", path);
+    int32_t dotPos = strcspn(path, ".");
+    DEBUG printf("dotPos=%i\n", dotPos);
+    if (strlen(path) == 0) return this;
+    char* first = new char[dotPos+1];
+    strncpy(first, path, dotPos);
+    first[dotPos] = '\0';
+    DEBUG printf("first=%s\n", first);
+    NbtTag* tag = 0;
+    for (int i = 0; i < payload->tagCompound->size(); i++) {
+        if (strcmp(first, payload->tagCompound->at(i)->getName()) == 0) {
+            tag = payload->tagCompound->at(i);
+            break;
+        }
+    }
+    delete[] first;
+    if (tag == 0) return 0;
+    if (dotPos == strlen(path)) return tag;
+    char* second = path+dotPos+1;
+    return tag->getTagAt(second);
+}
+
+NbtTagType NbtTag::getListType() const {
+    return payload->tagList.type;
+}
+
+int32_t NbtTag::getListSize() const {
+    return payload->tagList.size;
+}
+
+NbtPayload** NbtTag::getListValues() const {
+    return payload->tagList.values;
+}
+
+int64_t NbtTag::getInt() const {
+    if (type == tagTypeByte) return payload->tagByte;
+    if (type == tagTypeShort) return payload->tagShort;
+    if (type == tagTypeInt) return payload->tagInt;
+    if (type == tagTypeLong) return payload->tagLong;
+    return 0;
+}
+
+double NbtTag::getDouble() const {
+    if (type == tagTypeFloat) return payload->tagFloat;
+    if (type == tagTypeDouble) return payload->tagDouble;
+    return 0;
+}
+
+char* NbtTag::getString() const {
+    if (type == tagTypeString) return payload->tagString;
+    return "";
+}
+
+///// private functions /////
+
+void NbtTag::printPayload(NbtTagType type, NbtPayload* payload, unsigned int depth) const {
     // some formatting
     char spacing[128];
     spacing[0] = '\0';
@@ -150,7 +202,7 @@ void NbtTag::printPayload(NbtTagType type, NbtPayload* payload, unsigned int dep
                 printf("%s  ... and %i more\n", spacing, payload->tagList.size-10);
                 break;
             }
-            // TODO why does it output the List/Array name?
+            // TODO do not output the List/Array name
             printPayload(
                     payload->tagList.type,
                     payload->tagList.values[i],

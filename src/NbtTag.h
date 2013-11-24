@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include <fstream>
 #include <vector>
+#include <cstring>
 #include <zfstream.h>
 
 enum NbtTagType {
@@ -28,7 +29,7 @@ enum NbtTagType {
     tagTypeIntArray = 11
 };
 
-class NbtTag;
+class NbtTag; // forward declaration for use in tagCompound vector
 union NbtPayload {
     int8_t  tagByte;
     int16_t tagShort;
@@ -49,14 +50,23 @@ class NbtTag {
     public:
         NbtTag();
         ~NbtTag();
-        void loadFromFile(char *path, bool gzipped);
+        bool loadFromFile(char *path, bool gzipped);
         NbtTagType readTag(std::istream *file);
-        void printTag(unsigned int depth);
+        void printTag(unsigned int depth) const;
+        NbtTag* getTagAt(char* path);
+        char* getName() const;
+        // accessing payload
+        NbtTagType getListType() const;
+        int32_t getListSize() const;
+        NbtPayload** getListValues() const;
+        int64_t getInt() const;
+        double getDouble() const;
+        char* getString() const;
     private:
         NbtTagType type;
         char *name;
         NbtPayload *payload;
-        void printPayload(NbtTagType type, NbtPayload *payload, unsigned int depth);
+        void printPayload(NbtTagType type, NbtPayload *payload, unsigned int depth) const;
         NbtPayload *readPayload(NbtTagType type, std::istream *file);
         void safeRemovePayload();
 };

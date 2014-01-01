@@ -1,37 +1,80 @@
 NBT-Cpp
 =======
 
-The NbtTag class is a class to load and print NBT files.
+The NBT::Tag class is a class to load, create, modify, save, and print NBT files.
 
 From Notch's original spec:
 > NBT (Named Binary Tag) is a tag based binary format designed to carry large amounts of binary data with smaller amounts of additional data.
 
+Features
+--------
+
+- read raw filestream
+- read gzip filestream
+- read byte array
+- get tag name
+- get tag type
+- get tag value
+- get compound subtag
+- get list item
+- get tag content as string
+- print tag tree as json
+
+To do list
+----------
+
+- read region chunk
+- read region timestamps
+- write raw filestream
+- write gzip filestream
+- write region chunk
+
 Included programs
 -----------------
 
+
 ####`main.cpp`
 
-Arguments: `<path/to/file> [uncompressed]`
+Prints a json-like tree of the provided file.
+Supports uncompressed and gzip compressed files.
 
-The `main.cpp` program is a simple program which takes a compressed or uncompressed NBT file as input and prints out the contents in a json-like format.
-The flag `uncompressed` can be ignored because uncompressed files can also be read as compressed, that is because the gzip converter does not try to uncompress an uncompressed file.
+**Arguments:**
+
+`<path/to/file> [tag path=""]`
+
+- `path/to/file`: The file to load the tag from.
+    - Example: `testdata/bigtest.nbt`
+- `tag path`: The path to the tag that will be printed.
+    - Example: `nested compound test.ham.name`
 
 **Example:**
 
 `main bigtest.nbt`
 
-Prints the content of `bigtest.nbt` , which is too long and can be found here: <http://wiki.vg/NBT#bigtest.nbt>
+Prints the content of `bigtest.nbt`, which is too long and can be found here: <http://wiki.vg/NBT#bigtest.nbt>
+
 
 ####`map.cpp`
 
-Arguments: `<worldpath> <mapnr> [zoom=5] [infoSize=0]`
-
-The `map.cpp` program takes a minecraft world path and map id and renders the map item into a `.PNG` file.
+Takes a minecraft world path and map id and renders the map item into `map_#.png`.
 Optionally prints `scale`, `dimension`, `xCenter` and `zCenter` of the map.
+
+**Arguments:**
+
+`<worldpath> <mapnr> [zoom=5] [info text size=0]`
+
+- `worldpath`: The path to the Minecraft world.
+    - Example: `saves/Legio-Umbra/`
+- `mapnr`: The id of the map item.
+    - Example: `4`
+- `zoom`: The size of each map pixel.
+    - Example: `5`
+- `info text size`: The font size to use for the info text. `0` for no text.
+    - Example: `12`
 
 **Example:**
 
 `map saves/Legio-Umbra/ 4 5 12`
 
-Renders `saves/Legio-Umbra/data/map_4.dat` with `5x5` pixel size and printing various map data in font size `12`.
+Renders `saves/Legio-Umbra/data/map_4.dat` with `5x5` pixel size and prints various map data in font size `12`.
 

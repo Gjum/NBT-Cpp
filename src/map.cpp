@@ -1,19 +1,28 @@
 /* map.cpp
  *
- * Renders a map (item) into a png file (map_#.png).
- * Optionally prints `scale`, `dimension`, `xCenter` and `zCenter` of the map.
+ * Takes a minecraft world path and map id and renders the map item into "map_#.png".
+ * Optionally prints scale, dimension, xCenter and zCenter of the map.
  * 
- * Arguments: <worldpath> <mapnr> [zoom=5] [infoSize=0]
+ * Arguments: <worldpath> <mapnr> [zoom=5] [info text size=0]
  *
- * Example:
- * map saves/Legio-Umbra/ 4 5 12
- * Renders `saves/Legio-Umbra/data/map_4.dat` with `5x5` pixel size and printing various map data in font size `12`.
+ * - worldpath: The path to the Minecraft world.
+ *   Example: "saves/Legio-Umbra/"
+ * - mapnr: The id of the map item.
+ *   Example: 4
+ * - zoom: The size of each map pixel.
+ *   Example: 5
+ * - info text size: The font size to use for the info text. `0` for no text.
+ *   Example: 12
+ *
+ * Example: map saves/Legio-Umbra/ 4 5 12
+ *
+ *   Renders "saves/Legio-Umbra/data/map_4.dat" with 5x5 pixel size and prints various map data in font size 12.
  *
  * by Gjum <gjum42@gmail.com>
  */
 
 #include <cairo/cairo.h>
-#include "NbtTag.h"
+#include "nbt/Tag.h"
 
 int main(int argc, char* argv[]) {
     // read args
@@ -21,7 +30,7 @@ int main(int argc, char* argv[]) {
     unsigned int zoom = 5;
     unsigned int infoSize = 0;
     if (argc <= 2) {
-        printf("Usage: %s <worldpath> <mapnr> [zoom=5] [infoSize=0]", argv[0]);
+        printf("Usage: %s <worldpath> <mapnr> [zoom=5] [info text size=0]\n", argv[0]);
         return 0;
     }
     mapnr = atoi(argv[2]);
@@ -30,17 +39,17 @@ int main(int argc, char* argv[]) {
     //printf("Args: worldpath=%s mapnr=%i zoom=%i infoSize=%i\n", argv[1], mapnr, zoom, infoSize);
 
     // read map
-    char buffer[256];
-    sprintf(buffer, "%s/data/map_%i.dat", argv[1], mapnr);
-    NbtTag rootTag;
-    if (!rootTag.loadFromFile(buffer, true))
+    std::string filepath(argv[1]);
+   filepath += "/data/map_" + std::to_string(mapnr) + ".dat";
+    NBT::Tag rootTag;
+    if (rootTag.loadFromFile(filepath) == NULL)
         return -1;
     
     // read values
-    int16_t width = rootTag.getTagAt("data.width")->getInt();
-    int16_t height = rootTag.getTagAt("data.height")->getInt();
-    int32_t listSize = rootTag.getTagAt("data.colors")->getListSize();
-    NbtPayload** colorValues = rootTag.getTagAt("data.colors")->getListValues();
+    int16_t width = rootTag.getSubTag("data.width")->asInt();
+    int16_t height = rootTag.getSubTag("data.height")->asInt();
+    NBT::Tag * colorValues = rootTag.getSubTag("data.colors");
+    int32_t listSize = colorValues->getListSize();
 
     //printf("width=%i\n", width);
     //printf("height=%i\n", height);
@@ -107,7 +116,7 @@ int main(int argc, char* argv[]) {
     cairo_t *cr = cairo_create(surface);
     for (int32_t y = 0; y < height; y++) {
         for (int32_t x = 0; x < width; x++) {
-            char id = colorValues[x+y*width]->tagByte;
+            char id = colorValues->getListItemAsInt(x+y*width);
             if (id < 4) continue; // transparent
             float r = colors[3*id] / 256.0;
             float g = colors[3*id+1] / 256.0;
@@ -120,31 +129,32 @@ int main(int argc, char* argv[]) {
 
     // print map info
     if (infoSize) {
+        std::string str;
         cairo_select_font_face (cr, "sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
         cairo_set_font_size (cr, infoSize);
         cairo_set_source_rgb (cr, 1.0, 1.0, 0.0);
 
-        sprintf(buffer, "scale=%i", rootTag.getTagAt("data.scale")->getInt());
+        str = "scale=" + rootTag.getSubTag("data.scale")->asString();
         cairo_move_to (cr, 0.0, infoSize);
-        cairo_show_text (cr, buffer);
+        cairo_show_text (cr, str.c_str());
 
-        sprintf(buffer, "dimension=%i", rootTag.getTagAt("data.dimension")->getInt());
+        str = "dimension=", rootTag.getSubTag("data.dimension")->asString();
         cairo_move_to (cr, 0.0, infoSize*2);
-        cairo_show_text (cr, buffer);
+        cairo_show_text (cr, str.c_str());
 
-        sprintf(buffer, "xCenter=%i", rootTag.getTagAt("data.xCenter")->getInt());
+        str = "xCenter=", rootTag.getSubTag("data.xCenter")->asString();
         cairo_move_to (cr, 0.0, infoSize*3);
-        cairo_show_text (cr, buffer);
+        cairo_show_text (cr, str.c_str());
 
-        sprintf(buffer, "zCenter=%i", rootTag.getTagAt("data.zCenter")->getInt());
+        str = "zCenter=", rootTag.getSubTag("data.zCenter")->asString();
         cairo_move_to (cr, 0.0, infoSize*4);
-        cairo_show_text (cr, buffer);
+        cairo_show_text (cr, str.c_str());
     }
 
     // finish
     cairo_destroy (cr);
-    sprintf(buffer, "map_%i.png", mapnr);
-    cairo_surface_write_to_png (surface, buffer);
+    filepath = "map_" + std::to_string(mapnr) + ".png";
+    cairo_surface_write_to_png (surface, filepath.c_str());
     cairo_surface_destroy (surface);
 
     return 0;

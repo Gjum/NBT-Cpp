@@ -19,11 +19,11 @@ Features
 - get list item
 - get tag content as string
 - print tag tree as json
+- read region chunk
 
 To do list
 ----------
 
-- read region chunk
 - read region timestamps
 - write raw filestream
 - write gzip filestream
@@ -52,6 +52,41 @@ Supports uncompressed and gzip compressed files.
 `main bigtest.nbt`
 
 Prints the content of `bigtest.nbt`, which is too long and can be found here: <http://wiki.vg/NBT#bigtest.nbt>
+
+
+####`worldmap.cpp`
+
+Takes a minecraft world path and renders the map into `worldmap.png`.
+Rendered are `width`x`height` blocks around the `center`, each block `zoom`x`zoom` pixel large.
+Optionally prints `center x`, `center z`, `width`, and `height` of the map.
+WARNING: Not all blocks are in the color table, unknown blocks are rendered transparent.
+The current color data is from [Lahwran's ZanMinimap project](http://github.com/lahwran/zanmini).
+
+**Arguments:**
+
+`<worldpath> [center x=0] [center z=0] [width=256] [height=256] [zoom=1] [info text size=10]`
+
+- `worldpath`: The path to the Minecraft world.
+    - Example: `saves/Legio-Umbra/`
+- `center x`: The x coordinate of the block at the center of the image.
+    - Example: `500`
+- `center z`: The z coordinate of the block at the center of the image.
+    - Example: `-432`
+- `width`: The x range of the blocks in the image.
+    - Example: `600`
+- `height`: The z range of the blocks in the image.
+    - Example: `400`
+- `zoom`: The size of each map pixel.
+    - Example: `5`
+- `info text size`: The font size to use for the info text. `0` for no text.
+    - Example: `12`
+
+**Example:**
+
+`worldmap saves/Legio-Umbra/ 500 -432 600 400 5 12`
+
+Renders `saves/Legio-Umbra/` with `5x5` block size and prints various data in font size `12`.
+The image contains all blocks between `200,-632` and `800,-232` inclusive.
 
 
 ####`map.cpp`

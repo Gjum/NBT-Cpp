@@ -77,59 +77,44 @@ BlockColor * darkBlockColorOf(int id, int meta) {
     return blockColorsDark[blockColorID(id, meta)];
 }
 
-BlockColor * colorInChunk(char x, char z, NBT::Tag * chunk) {
-    if (chunk == NULL) return NULL; // no chunk loaded
-
-    NBT::Tag * level = chunk->getSubTag("Level");
-    if (level == NULL) return NULL; // chunk is not generated
-
-    // block position
-    int y = level->getSubTag("HeightMap")->getListItemAsInt(x+z*16)-1;
-    if (y < 0) return NULL; // no blocks present, render transparent
-
-    int sectionID = y/16;
-    int blockIndex = x+z*16+(y%16)*16*16;
-
-    NBT::Tag * section = level->getSubTag("Sections")->getListItemAsTag(sectionID);
-    if (section == NULL) return NULL; // section is not generated
-
-    // block id
-    int id = (unsigned char) section->getSubTag("Blocks")->getListItemAsInt(blockIndex);
-    if (id < 0 || id > 0xff) {
-        printf("colorAt: Invalid id: %i\n", id);
-        return NULL;
-    }
-
-    // block metadata (upper/lower 4 bit of the byte)
-    int meta = (section->getSubTag("Data")->getListItemAsInt(blockIndex/2) >> (blockIndex%2)*4) & 0x0F;
-    if (meta < 0 || meta > 0xf) {
-        printf("colorAt: Invalid meta: %i\n", meta);
-        return NULL;
-    }
-
-    delete section; // we have to clean up the allocated data to prevent memory leaking
-
-    // finally we get the color of the block
-    BlockColor * color = blockColorOf(id, meta);
-
-    // heightmap visualization
-    if (y%2 == 0) {
-        color = darkBlockColorOf(id, meta);
-    }
-
-    // error handling
-    if (color == NULL) {
-        // could not find the color, although there are blocks
-        // unknown metadata? fallback to meta=0
-        color = blockColorOf(id, 0);
-        if (color == NULL) {
-            // unknown block id and meta? render transparent
-            printf("colorAt: Didn't get color: block %3i:%i\n", id, meta);
-            return NULL;
+void getColorsFromChunk(NBT::Tag * level, BlockColor ** chunkColors) {
+    for (int i = 0; i < 16*16; i++) chunkColors[i] = NULL;
+    unsigned int colorsFound = 0; // for quick stopping
+    // search all sections, begin at the top (assuming they are sorted)
+    // loop breaks when all 16*16 visible blocks have been found
+    for (int sectionID = 15; sectionID >= 0; sectionID--) {
+        //printf("Rendering: section %i\n", sectionID);
+        NBT::Tag * section = level->getSubTag("Sections")->getListItemAsTag(sectionID);
+        if (section == NULL) continue; // skip empty sections
+        NBT::Tag * ids = section->getSubTag("Blocks");
+        NBT::Tag * metas = section->getSubTag("Data");
+        // search all blocks in section, begin at the top
+        for (int i = 16*16*16-1; i >= 0; i--) {
+            if (chunkColors[i%(16*16)] != NULL) continue; // skip if already found a block here
+            unsigned char id = ids->getListItemAsInt(i);
+            if (id == 0) continue; // quick jump for air
+            unsigned char meta = (metas->getListItemAsInt(i/2) >> (i%2)*4) & 0x0F;
+            BlockColor * color = blockColorOf(id, meta);
+            // error handling
+            if (color == NULL) {
+                // could not find the color, although there are blocks
+                // unknown metadata? fallback to meta=0
+                color = blockColorOf(id, meta = 0); // set meta if dark color is used later
+                if (color == NULL) {
+                    // unknown block id and meta? render transparent
+                    //printf("colorAt: Didn't get color: block %3i:%i\n", id, meta);
+                    continue;
+                }
+            }
+            // heightmap visualization
+            if ((i/256)%2 == 0) color = darkBlockColorOf(id, meta);
+            // save color and go to next block
+            chunkColors[i%(16*16)] = color;
+            if (++colorsFound >= 16*16) break;
         }
+        delete section; // because we allocate memory when extracting list items as tags
+        if (colorsFound >= 16*16) break;
     }
-
-    return color;
 }
 
 void drawOnMap(cairo_t * cr, BlockColor * color, int x, int z, int size) {
@@ -159,7 +144,7 @@ int main(int argc, char* argv[]) {
     if (argc > 5) height   = atoi(argv[5]);
     if (argc > 6) zoom     = atoi(argv[6]);
     if (argc > 7) infoSize = atoi(argv[7]);
-    printf("Arguments: worldpath=%s centerx=%i centerz=%i width=%i height=%i zoom=%i info=%i\n", worldpath, centerx, centerz, width, height, zoom, infoSize);
+    printf("Arguments: worldpath=%s centerx=%i centerz=%i width=%i height=%i zoom=%i infoSize=%i\n", worldpath, centerx, centerz, width, height, zoom, infoSize);
 
     printf("Building color table ...\n");
     buildColorTable();
@@ -171,30 +156,40 @@ int main(int argc, char* argv[]) {
     int left = centerx-width/2;
     int top  = centerz-height/2;
 
+    unsigned int progress = 0;
     omp_lock_t lck;
     omp_init_lock(&lck);
-#pragma omp parallel for shared(cr)
+#pragma omp parallel for shared(cr, progress)
     for (int chunkz = top >> 4; chunkz <= (top+height) >> 4; chunkz++) {
         for (int chunkx = left >> 4; chunkx <= (left+width) >> 4; chunkx++) {
-            //printf("Rendering: %i %i\n", chunkx, chunkz);
+            //printf("Rendering: chunk %i,%i\n", chunkx, chunkz);
             NBT::Tag * chunk = (new NBT::Tag)->loadFromChunk(worldpath, chunkx, chunkz);
             if (chunk == NULL) continue; // could not reserve memory or no chunk present
-            if (chunk->getSubTag("Level") == NULL) { // no chunk
+            NBT::Tag * level = chunk->getSubTag("Level");
+            if (level == NULL) { // no chunk
                 delete chunk;
                 continue;
             }
-            for (char inChunkz = 0; inChunkz < 16; inChunkz++) {
-                for (char inChunkx = 0; inChunkx < 16; inChunkx++) {
-                    // get color values
-                    BlockColor * color = colorInChunk(inChunkx, inChunkz, chunk);
-                    if (color == NULL) continue; // error or transparent (no block)
-                    omp_set_lock(&lck);
-                    drawOnMap(cr, color, (inChunkx+chunkx*16-left)*zoom, (inChunkz+chunkz*16-top)*zoom, zoom);
-                    omp_unset_lock(&lck);
+            BlockColor * chunkColors[16*16];
+            getColorsFromChunk(level, chunkColors);
+            omp_set_lock(&lck);
+            for (int i = 0; i < 16*16; i++) {
+                if (chunkColors[i] == NULL) {
+                    //printf("Rendering: Tried to render empty block, chunk %i,%i block %i\n", chunkx, chunkz, i);
+                    continue; // error or transparent (no block)
                 }
+                drawOnMap(cr, chunkColors[i], ((i%16)+chunkx*16-left)*zoom, ((i/16)+chunkz*16-top)*zoom, zoom);
             }
+            omp_unset_lock(&lck);
             delete chunk;
         }
+        omp_set_lock(&lck);
+        unsigned int progressOldPercent = 100*progress/(height/16 + 1);
+        progress++;
+        unsigned int progressPercent    = 100*progress/(height/16 + 1);
+        if (progressPercent > progressOldPercent)
+            printf("Progress: %i%%\n", progressPercent);
+        omp_unset_lock(&lck);
     }
     omp_destroy_lock(&lck);
 

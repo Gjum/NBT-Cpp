@@ -38,6 +38,7 @@ struct BlockColor {
 };
 
 BlockColor * blockColors[4096]; // 2^(8+4), id has 8 bit, meta has 4 bit
+BlockColor * blockColorsDark[4096];
 
 int blockColorID(int id, int meta) {
     return id | (meta << 8);
@@ -49,11 +50,19 @@ void SetColor(unsigned char id, unsigned char meta, unsigned int value) {
     color->green = (value >> 8) & 0xff;
     color->blue  = value & 0xff;
     blockColors[blockColorID(id, meta)] = color;
+
+    // darker color
+    BlockColor * colorDark = new BlockColor;
+    colorDark->red   = int(color->red  ) * 95 / 100;
+    colorDark->green = int(color->green) * 95 / 100;
+    colorDark->blue  = int(color->blue ) * 95 / 100;
+    blockColorsDark[blockColorID(id, meta)] = colorDark;
 }
 
 void buildColorTable() {
     for (unsigned int i = 0; i < 4096; i++) {
         blockColors[i] = NULL;
+        blockColorsDark[i] = NULL;
     }
     // too many colors, I put them in an extra file
     // they are included at compile time
@@ -63,21 +72,25 @@ void buildColorTable() {
 BlockColor * blockColorOf(int id, int meta) {
     return blockColors[blockColorID(id, meta)];
 }
+BlockColor * darkBlockColorOf(int id, int meta) {
+    return blockColorsDark[blockColorID(id, meta)];
+}
 
 BlockColor * colorInChunk(char x, char z, NBT::Tag * chunk) {
     if (chunk == NULL) return NULL; // no chunk loaded
 
     NBT::Tag * level = chunk->getSubTag("Level");
-    if (level == NULL) return NULL; // The chunk is a spy! but not a chunk
+    if (level == NULL) return NULL; // chunk is not generated
 
     // block position
     int y = level->getSubTag("HeightMap")->getListItemAsInt(x+z*16)-1;
-    if (y < 0) return NULL; // no blocks present
+    if (y < 0) return NULL; // no blocks present, render transparent
+
     int sectionID = y/16;
     int blockIndex = x+z*16+(y%16)*16*16;
 
     NBT::Tag * section = level->getSubTag("Sections")->getListItemAsTag(sectionID);
-    if (section == NULL) return NULL; // The section is a spy! but not a section
+    if (section == NULL) return NULL; // section is not generated
 
     // block id
     int id = (unsigned char) section->getSubTag("Blocks")->getListItemAsInt(blockIndex);
@@ -97,6 +110,13 @@ BlockColor * colorInChunk(char x, char z, NBT::Tag * chunk) {
 
     // finally we get the color of the block
     BlockColor * color = blockColorOf(id, meta);
+
+    // heightmap visualization
+    if (y%2 == 0) {
+        color = darkBlockColorOf(id, meta);
+    }
+
+    // error handling
     if (color == NULL) {
         // could not find the color, although there are blocks
         // unknown metadata? fallback to meta=0
@@ -104,8 +124,10 @@ BlockColor * colorInChunk(char x, char z, NBT::Tag * chunk) {
         if (color == NULL) {
             // unknown block id and meta? render transparent
             printf("colorAt: Didn't get color: block %3i:%i\n", id, meta);
+            return NULL;
         }
     }
+
     return color;
 }
 

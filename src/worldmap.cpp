@@ -30,6 +30,7 @@
  * by Gjum <gjum42@gmail.com> <http://gjum.sytes.net/>
  */
 
+#include <omp.h>
 #include <cairo/cairo.h>
 #include "nbt/Tag.h"
 
@@ -131,6 +132,15 @@ BlockColor * colorInChunk(char x, char z, NBT::Tag * chunk) {
     return color;
 }
 
+void drawOnMap(cairo_t * cr, BlockColor * color, int x, int z, int size) {
+    float r = color->red   / 256.0;
+    float g = color->green / 256.0;
+    float b = color->blue  / 256.0;
+    cairo_set_source_rgb(cr, r,g,b);
+    cairo_rectangle(cr, x, z, size, size);
+    cairo_fill(cr);
+}
+
 int main(int argc, char* argv[]) {
     if (argc <= 1) {
         printf("Usage: %s <worldpath> [center x=0] [center z=0] [width=256] [height=256] [zoom=1] [info text size=10]\n", argv[0]);
@@ -149,17 +159,21 @@ int main(int argc, char* argv[]) {
     if (argc > 5) height   = atoi(argv[5]);
     if (argc > 6) zoom     = atoi(argv[6]);
     if (argc > 7) infoSize = atoi(argv[7]);
-    //printf("Args: worldpath=%s centerx=%i centerz=%i width=%i height=%i zoom=%i info=%i\n", worldpath, centerx, centerz, width, height, zoom, infoSize);
+    printf("Arguments: worldpath=%s centerx=%i centerz=%i width=%i height=%i zoom=%i info=%i\n", worldpath, centerx, centerz, width, height, zoom, infoSize);
 
     printf("Building color table ...\n");
     buildColorTable();
 
-    // print map
+    // render map
     printf("Rendering map ...\n");
     cairo_surface_t * surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width*zoom, height*zoom);
     cairo_t * cr = cairo_create(surface);
     int left = centerx-width/2;
     int top  = centerz-height/2;
+
+    omp_lock_t lck;
+    omp_init_lock(&lck);
+#pragma omp parallel for shared(cr)
     for (int chunkz = top >> 4; chunkz <= (top+height) >> 4; chunkz++) {
         for (int chunkx = left >> 4; chunkx <= (left+width) >> 4; chunkx++) {
             //printf("Rendering: %i %i\n", chunkx, chunkz);
@@ -174,17 +188,15 @@ int main(int argc, char* argv[]) {
                     // get color values
                     BlockColor * color = colorInChunk(inChunkx, inChunkz, chunk);
                     if (color == NULL) continue; // error or transparent (no block)
-                    float r = color->red   / 256.0;
-                    float g = color->green / 256.0;
-                    float b = color->blue  / 256.0;
-                    cairo_set_source_rgb(cr, r,g,b);
-                    cairo_rectangle(cr, (inChunkx+chunkx*16-left)*zoom, (inChunkz+chunkz*16-top)*zoom, zoom, zoom);
-                    cairo_fill(cr);
+                    omp_set_lock(&lck);
+                    drawOnMap(cr, color, (inChunkx+chunkx*16-left)*zoom, (inChunkz+chunkz*16-top)*zoom, zoom);
+                    omp_unset_lock(&lck);
                 }
             }
             delete chunk;
         }
     }
+    omp_destroy_lock(&lck);
 
     // print map info
     if (infoSize) {

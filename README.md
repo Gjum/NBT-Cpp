@@ -59,8 +59,7 @@ Prints the content of `bigtest.nbt`, which is too long and can be found here: <h
 Takes a minecraft world path and renders the map into `worldmap.png`.
 Rendered are `width`x`height` blocks around the `center`, each block `zoom`x`zoom` pixel large.
 Optionally prints `center x`, `center z`, `width`, and `height` of the map.
-WARNING: Not all blocks are in the color table, unknown blocks are rendered transparent.
-The current color data is from [Lahwran's ZanMinimap project](http://github.com/lahwran/zanmini).
+The current color data is from the ingame map renderer, slightly adjusted by me.
 
 **Arguments:**
 
@@ -86,7 +85,7 @@ The current color data is from [Lahwran's ZanMinimap project](http://github.com/
 `worldmap saves/Legio-Umbra/ 500 -432 600 400 5 12`
 
 Renders `saves/Legio-Umbra/` with `5x5` block size and prints various data in font size `12`.
-The image contains all blocks between `200,-632` and `800,-232` inclusive.
+The image contains all blocks from 200,-632 to 799,-231.
 
 
 ####`map.cpp`

@@ -138,15 +138,15 @@ int main(int argc, char* argv[]) {
         cairo_move_to (cr, 0.0, infoSize);
         cairo_show_text (cr, str.c_str());
 
-        str = "dimension=", rootTag.getSubTag("data.dimension")->asString();
+        str = "dimension=" + rootTag.getSubTag("data.dimension")->asString();
         cairo_move_to (cr, 0.0, infoSize*2);
         cairo_show_text (cr, str.c_str());
 
-        str = "xCenter=", rootTag.getSubTag("data.xCenter")->asString();
+        str = "xCenter=" + rootTag.getSubTag("data.xCenter")->asString();
         cairo_move_to (cr, 0.0, infoSize*3);
         cairo_show_text (cr, str.c_str());
 
-        str = "zCenter=", rootTag.getSubTag("data.zCenter")->asString();
+        str = "zCenter=" + rootTag.getSubTag("data.zCenter")->asString();
         cairo_move_to (cr, 0.0, infoSize*4);
         cairo_show_text (cr, str.c_str());
     }

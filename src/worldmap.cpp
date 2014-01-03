@@ -93,7 +93,7 @@ BlockColor * colorInChunk(char x, char z, NBT::Tag * chunk) {
         return NULL;
     }
 
-    //delete section; // TODO there is leaking memory, but we can't delete it, because that's how NBT::Tag works :(
+    delete section; // we have to clean up the allocated data to prevent memory leaking
 
     // finally we get the color of the block
     BlockColor * color = blockColorOf(id, meta);

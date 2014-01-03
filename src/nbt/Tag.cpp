@@ -10,7 +10,7 @@
 
 #include "Tag.h"
 
-#include <stdexcept>
+#include <stdexcept> // TODO make string to int conversion better
 
 //#define DEBUG if (1)
 #ifndef DEBUG
@@ -23,6 +23,7 @@ namespace NBT {
         name = "";
         type = tagTypeInvalid;
         payload = NULL;
+        payloadToBeDeleted = true;
     }
 
     Tag::Tag(std::string name_, TagType type_, int64_t val) {
@@ -30,6 +31,7 @@ namespace NBT {
         type = type_;
         payload = new Payload;
         payload->tagInt = val;
+        payloadToBeDeleted = true;
     }
 
     Tag::Tag(std::string name_, TagType type_, double val) {
@@ -37,6 +39,7 @@ namespace NBT {
         type = type_;
         payload = new Payload;
         payload->tagFloat = val;
+        payloadToBeDeleted = true;
     }
 
     Tag::Tag(std::string name_, TagType type_, std::string val) {
@@ -44,6 +47,7 @@ namespace NBT {
         type = type_;
         payload = new Payload;
         payload->tagString = new std::string(val);
+        payloadToBeDeleted = true;
     }
 
     Tag::Tag(std::string name_, TagType type_, TagType valueType, std::vector<Payload *> * values) {
@@ -52,6 +56,7 @@ namespace NBT {
         payload = new Payload;
         payload->tagList.type = valueType;
         payload->tagList.values = values;
+        payloadToBeDeleted = false;
     }
 
     Tag::Tag(std::string name_, TagType type_, std::vector<Tag *> * tags) {
@@ -59,6 +64,7 @@ namespace NBT {
         type = type_;
         payload = new Payload;
         payload->tagCompound = tags;
+        payloadToBeDeleted = false;
     }
 
     Tag::~Tag() {
@@ -127,6 +133,8 @@ namespace NBT {
             DEBUG printf("name=%s\n", name.c_str());
             // read payload
             payload = readPayload(type, data);
+            // TODO test if payload could be read
+            payloadToBeDeleted = true;
         }
         return this;
     }
@@ -633,16 +641,16 @@ namespace NBT {
     void Tag::safeRemovePayload(Payload * payload, TagType type) {
         DEBUG printf("Deleting payload of '%s' ...\n", name.c_str());
         if (payload != NULL) {
-            if (type == tagTypeString) {
+            if (type == tagTypeString && payloadToBeDeleted) {
                 delete payload->tagString;
             }
-            else if (type == tagTypeCompound) {
+            else if (type == tagTypeCompound && payloadToBeDeleted) {
                 DEBUG printf("Deleting tagCompound, size=%i\n", payload->tagCompound->size());
                 for (int i = 0; i < payload->tagCompound->size(); i++)
                     delete payload->tagCompound->at(i);
                 delete payload->tagCompound;
             }
-            else if (isListType(type)) {
+            else if (isListType(type) && payloadToBeDeleted) {
                 DEBUG printf("Deleting list type, size=%i\n", payload->tagList.values->size());
                 for (int i = 0; i < payload->tagList.values->size(); i++) {
                     DEBUG printf("Here goes entry %i ...\n", i);

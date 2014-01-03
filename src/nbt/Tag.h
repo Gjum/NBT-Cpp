@@ -4,6 +4,7 @@
  *
  * TODO better error handling
  *      (error class, getting and resetting recent errors)
+ *      make it clearer and understandable when to delete tags and when not
  *
  * by Gjum <gjum42@gmail.com>
  */
@@ -191,6 +192,9 @@ namespace NBT {
             TagType type;
             std::string name;
             Payload * payload;
+            bool payloadToBeDeleted;
+            // If true, any pointer in the payload will be removed when destroyed.
+            // If false, assume the value is copied from elsewhere and deleted there.
 
             //========== private functions ==========
 

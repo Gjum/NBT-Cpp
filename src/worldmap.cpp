@@ -31,12 +31,13 @@
  */
 
 #include <omp.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdint.h> // BlockColor
 #include <cairo/cairo.h>
 #include "nbt/Tag.h"
 
-struct BlockColor {
-    unsigned char red, green, blue;
-};
+typedef int32_t BlockColor;
 
 BlockColor * blockColors[4096]; // 2^(8+4), id has 8 bit, meta has 4 bit
 BlockColor * blockColorsDark[4096];
@@ -47,17 +48,16 @@ int blockColorID(int id, int meta) {
 
 void SetColor(unsigned char id, unsigned char meta, unsigned int value) {
     BlockColor * color = new BlockColor;
-    color->red   = (value >> 16) & 0xff;
-    color->green = (value >> 8) & 0xff;
-    color->blue  = value & 0xff;
+    *color = 0xff000000 | value;
     blockColors[blockColorID(id, meta)] = color;
 
     // darker color
-    BlockColor * colorDark = new BlockColor;
-    colorDark->red   = int(color->red  ) * 95 / 100;
-    colorDark->green = int(color->green) * 95 / 100;
-    colorDark->blue  = int(color->blue ) * 95 / 100;
-    blockColorsDark[blockColorID(id, meta)] = colorDark;
+    unsigned char * colorDark = new unsigned char[4];
+    colorDark[3] = 0xff;
+    colorDark[2] = ((value >> 16) & 0xff) * 95 / 100;
+    colorDark[1] = ((value >> 8)  & 0xff) * 95 / 100;
+    colorDark[0] = ( value        & 0xff) * 95 / 100;
+    blockColorsDark[blockColorID(id, meta)] = (BlockColor *) colorDark;
 }
 
 void buildColorTable() {
@@ -75,6 +75,28 @@ BlockColor * blockColorOf(int id, int meta) {
 }
 BlockColor * darkBlockColorOf(int id, int meta) {
     return blockColorsDark[blockColorID(id, meta)];
+}
+
+void drawChunkOnMap(cairo_surface_t * surface, BlockColor * chunkColors[], int x, int z, int zoom) {
+    cairo_surface_flush(surface);
+    int32_t * imgdata = (int32_t *) cairo_image_surface_get_data(surface);
+    int imgwidth  = cairo_image_surface_get_width(surface);
+    int imgheight = cairo_image_surface_get_height(surface);
+    for (int i = 0; i < 16*16; i++) { // all blocks in chunk
+        if (chunkColors[i] == NULL) {
+            //printf("Rendering: Tried to render empty block, chunk %i,%i block %i\n", chunkx, chunkz, i);
+            continue; // error or transparent (no block)
+        }
+        int imgx = (i%16)*zoom + x;
+        int imgy = (i/16)*zoom + z;
+        if (imgx < 0 || imgy < 0 || imgx >= imgwidth || imgy >= imgheight) {
+            continue; // outside the image, happens because we render chunks completely even if only partly on the image
+        }
+        int imgIndex = imgx + imgy*imgwidth;
+        for (int j = 0; j < zoom*zoom; j++) // rectangle for one block
+            imgdata[imgIndex + j%zoom+(j/zoom)*imgwidth] = *chunkColors[i];
+    }
+    cairo_surface_mark_dirty_rectangle(surface, x, z, 16*zoom, 16*zoom);
 }
 
 void getColorsFromChunk(NBT::Tag * level, BlockColor ** chunkColors) {
@@ -115,15 +137,6 @@ void getColorsFromChunk(NBT::Tag * level, BlockColor ** chunkColors) {
         delete section; // because we allocate memory when extracting list items as tags
         if (colorsFound >= 16*16) break;
     }
-}
-
-void drawOnMap(cairo_t * cr, BlockColor * color, int x, int z, int size) {
-    float r = color->red   / 256.0;
-    float g = color->green / 256.0;
-    float b = color->blue  / 256.0;
-    cairo_set_source_rgb(cr, r,g,b);
-    cairo_rectangle(cr, x, z, size, size);
-    cairo_fill(cr);
 }
 
 int main(int argc, char* argv[]) {
@@ -173,13 +186,7 @@ int main(int argc, char* argv[]) {
             BlockColor * chunkColors[16*16];
             getColorsFromChunk(level, chunkColors);
             omp_set_lock(&lck);
-            for (int i = 0; i < 16*16; i++) {
-                if (chunkColors[i] == NULL) {
-                    //printf("Rendering: Tried to render empty block, chunk %i,%i block %i\n", chunkx, chunkz, i);
-                    continue; // error or transparent (no block)
-                }
-                drawOnMap(cr, chunkColors[i], ((i%16)+chunkx*16-left)*zoom, ((i/16)+chunkz*16-top)*zoom, zoom);
-            }
+            drawChunkOnMap(surface, chunkColors, (chunkx*16-left)*zoom, (chunkz*16-top)*zoom, zoom);
             omp_unset_lock(&lck);
             delete chunk;
         }

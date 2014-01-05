@@ -1,161 +1,326 @@
-SetColor(  0,  0, 0xff00ff);
-SetColor(  1,  0, 0x6d6d6d);
-SetColor(  2,  0, 0x7cae36);
-SetColor(  3,  0, 0xb2672d);
-SetColor(  4,  0, 0x6d6d6d);
-SetColor(  5,  0, 0x655130);
-SetColor(  7,  0, 0x6d6d6d);
-SetColor(  8,  0, 0x4040ff);
-SetColor(  9,  0, 0x4040ff);
-SetColor( 10,  0, 0x6d6d6d);
-SetColor( 11,  0, 0xf90000);
-SetColor( 12,  0, 0xf1e39f);
-SetColor( 12,  1, 0xb2672d);
-SetColor( 13,  0, 0xa3a3a3);
-SetColor( 14,  0, 0x6d6d6d);
-SetColor( 15,  0, 0x6d6d6d);
-SetColor( 16,  0, 0x6d6d6d);
-SetColor( 17,  0, 0x655130);
-SetColor( 18,  0, 0x007900);
-SetColor( 19,  0, 0xa3a3a3);
-SetColor( 21,  0, 0x6d6d6d);
-SetColor( 22,  0, 0x334cb2);
-SetColor( 23,  0, 0x6d6d6d);
-SetColor( 24,  0, 0x6d6d6d);
-SetColor( 25,  0, 0x655130);
-SetColor( 26,  0, 0xa3a3a3);
-SetColor( 29,  0, 0x6d6d6d);
-SetColor( 30,  0, 0xa3a3a3);
-SetColor( 33,  0, 0x6d6d6d);
-SetColor( 34,  0, 0x6d6d6d);
-SetColor( 35,  0, 0xffffff);
-SetColor( 35,  1, 0xd87f33);
-SetColor( 35,  2, 0xb24cd8);
-SetColor( 35,  3, 0x6699d8);
-SetColor( 35,  4, 0xe5e533);
-SetColor( 35,  5, 0x7fcc19);
-SetColor( 35,  6, 0xf27fa5);
-SetColor( 35,  7, 0x4c4c4c);
-SetColor( 35,  8, 0x999999);
-SetColor( 35,  9, 0x4c7f99);
-SetColor( 35, 10, 0x7f3fb2);
-SetColor( 35, 11, 0x334cb2);
-SetColor( 35, 12, 0x664c33);
-SetColor( 35, 13, 0x667f33);
-SetColor( 35, 14, 0x993333);
-SetColor( 35, 15, 0x191919);
-SetColor( 36,  0, 0x6d6d6d);
-SetColor( 39,  0, 0x007900);
-SetColor( 40,  0, 0x007900);
-SetColor( 41,  0, 0xf4e84b);
-SetColor( 42,  0, 0xa3a3a3);
-SetColor( 43,  0, 0x6d6d6d);
-SetColor( 44,  0, 0x6d6d6d);
-SetColor( 45,  0, 0x6d6d6d);
-SetColor( 46,  0, 0xf90000);
-SetColor( 47,  0, 0x655130);
-SetColor( 48,  0, 0x6d6d6d);
-SetColor( 49,  0, 0x191919);
-SetColor( 51,  0, 0xf90000);
-SetColor( 52,  0, 0x7d3598);
-SetColor( 53,  0, 0x655130);
-SetColor( 54,  0, 0x655130);
-SetColor( 56,  0, 0x6d6d6d);
-SetColor( 57,  0, 0x59d6d0);
-SetColor( 58,  0, 0x655130);
-SetColor( 60,  0, 0xb2672d);
-SetColor( 61,  0, 0x6d6d6d);
-SetColor( 62,  0, 0x6d6d6d);
-SetColor( 63,  0, 0x655130);
-SetColor( 64,  0, 0x655130);
-SetColor( 67,  0, 0x6d6d6d);
-SetColor( 68,  0, 0x655130);
-SetColor( 70,  0, 0x6d6d6d);
-SetColor( 72,  0, 0x655130);
-SetColor( 73,  0, 0x6d6d6d);
-SetColor( 74,  0, 0x6d6d6d);
-SetColor( 78,  0, 0xf9f9f9);
-SetColor( 79,  0, 0x9c9cf9);
-SetColor( 80,  0, 0xf9f9f9);
-SetColor( 81,  0, 0x007900);
-SetColor( 82,  0, 0xa0a4b3);
-SetColor( 84,  0, 0x655130);
-SetColor( 85,  0, 0x655130);
-SetColor( 86,  0, 0x007900);
-SetColor( 87,  0, 0x790000);
-SetColor( 88,  0, 0xf1e39f);
-SetColor( 89,  0, 0xf1e39f);
-SetColor( 91,  0, 0x007900);
-SetColor( 95,  0, 0x655130);
-SetColor( 96,  0, 0x655130);
-SetColor( 97,  0, 0xa0a4b3);
-SetColor( 98,  0, 0x6d6d6d);
-SetColor( 99,  0, 0x655130);
-SetColor(100,  0, 0x655130);
-SetColor(101,  0, 0xa3a3a3);
-SetColor(103,  0, 0x007900);
-SetColor(106,  0, 0x007900);
-SetColor(107,  0, 0x655130);
-SetColor(108,  0, 0x6d6d6d);
-SetColor(109,  0, 0x6d6d6d);
-SetColor(110,  0, 0x7cae36);
-SetColor(112,  0, 0x6d6d6d);
-SetColor(113,  0, 0x6d6d6d);
-SetColor(114,  0, 0x6d6d6d);
-SetColor(116,  0, 0x6d6d6d);
-SetColor(117,  0, 0xa3a3a3);
-SetColor(118,  0, 0xa3a3a3);
-SetColor(119,  0, 0x191919);
-SetColor(120,  0, 0x6d6d6d);
-SetColor(121,  0, 0x6d6d6d);
-SetColor(122,  0, 0x007900);
-SetColor(123,  0, 0x655130);
-SetColor(124,  0, 0xe5e533);
-SetColor(125,  0, 0x655130);
-SetColor(126,  0, 0x655130);
-SetColor(128,  0, 0x6d6d6d);
-SetColor(129,  0, 0x6d6d6d);
-SetColor(130,  0, 0x6d6d6d);
-SetColor(133,  0, 0x88ff88);
-SetColor(134,  0, 0x655130);
-SetColor(135,  0, 0x655130);
-SetColor(136,  0, 0x655130);
-SetColor(137,  0, 0xa3a3a3);
-SetColor(139,  0, 0x6d6d6d);
-SetColor(145,  0, 0xa3a3a3);
-SetColor(146,  0, 0x655130);
-SetColor(147,  0, 0xa3a3a3);
-SetColor(148,  0, 0xa3a3a3);
-SetColor(151,  0, 0x655130);
-SetColor(152,  0, 0xf90000);
-SetColor(153,  0, 0x6d6d6d);
-SetColor(154,  0, 0xa3a3a3);
-SetColor(155,  0, 0xf9f6ef);
-SetColor(156,  0, 0xf9f6ef);
-SetColor(158,  0, 0x6d6d6d);
-SetColor(159,  0, 0xffffff);
-SetColor(159,  1, 0xd87f33);
-SetColor(159,  2, 0xb24cd8);
-SetColor(159,  3, 0x6699d8);
-SetColor(159,  4, 0xe5e533);
-SetColor(159,  5, 0x7fcc19);
-SetColor(159,  6, 0xf27fa5);
-SetColor(159,  7, 0x4c4c4c);
-SetColor(159,  8, 0x999999);
-SetColor(159,  9, 0x4c7f99);
-SetColor(159, 10, 0x7f3fb2);
-SetColor(159, 11, 0x334cb2);
-SetColor(159, 12, 0x664c33);
-SetColor(159, 13, 0x667f33);
-SetColor(159, 14, 0x993333);
-SetColor(159, 15, 0x191919);
-SetColor(161,  0, 0x007900);
-SetColor(162,  0, 0x655130);
-SetColor(163,  0, 0x655130);
-SetColor(164,  0, 0x655130);
-SetColor(170,  0, 0x7cae36);
-SetColor(171,  0, 0xa3a3a3);
-SetColor(172,  0, 0xd37c31);
-SetColor(173,  0, 0x6d6d6d);
-SetColor(174,  0, 0x9c9cf9);
+SetColor(  1,  0, 0xff7d7d7d); //                 stone stone
+SetColor(  2,  0, 0xff7cae36); // MANUAL grass
+SetColor(  3,  0, 0xff866043); //                  dirt dirt
+SetColor(  4,  0, 0xff7a7a7a); //           cobblestone cobblestone
+SetColor(  5,  0, 0xff9c7f4e); //                planks planks_oak
+SetColor(  5,  1, 0xff674d2e); //                planks planks_spruce
+SetColor(  5,  2, 0xffc3b37b); //                planks planks_birch
+SetColor(  5,  3, 0xff9a6e4d); //                planks planks_jungle
+SetColor(  5,  4, 0xffa95b33); //                planks planks_acacia
+SetColor(  5,  5, 0xff3d2712); //                planks planks_big_oak
+SetColor(  7,  0, 0xff535353); //               bedrock bedrock
+SetColor(  8,  0, 0x78172273); //         flowing_water water_flow
+SetColor(  9,  0, 0x7e172179); //                 water water_still
+SetColor( 10,  0, 0xffce5812); //          flowing_lava lava_flow
+SetColor( 11,  0, 0xffd8681a); //                  lava lava_still
+SetColor( 12,  0, 0xffdbd3a0); //                  sand sand
+SetColor( 12,  1, 0xffa95821); //              red_sand red_sand
+SetColor( 13,  0, 0xff7e7c7a); //                gravel gravel
+SetColor( 14,  0, 0xff8f8b7c); //              gold_ore gold_ore
+SetColor( 15,  0, 0xff87827e); //              iron_ore iron_ore
+SetColor( 16,  0, 0xff737373); //              coal_ore coal_ore
+SetColor( 17,  0, 0xff9a7d4d); //                   log log_oak_top
+SetColor( 17,  1, 0xff685130); //                   log log_spruce_top
+SetColor( 17,  2, 0xffb8a679); //                   log log_birch_top
+SetColor( 17,  3, 0xff997649); //                   log log_jungle_top
+SetColor( 17,  4, 0xff665131); //                   log log_oak
+SetColor( 17,  5, 0xff2d1c0c); //                   log log_spruce
+SetColor( 17,  6, 0xffcecec9); //                   log log_birch
+SetColor( 17,  7, 0xff57431a); //                   log log_jungle
+SetColor( 17,  8, 0xff665131); //                   log log_oak
+SetColor( 17,  9, 0xff2d1c0c); //                   log log_spruce
+SetColor( 17, 10, 0xffcecec9); //                   log log_birch
+SetColor( 17, 11, 0xff57431a); //                   log log_jungle
+SetColor( 17, 12, 0xff665131); //                   log log_oak
+SetColor( 17, 13, 0xff2d1c0c); //                   log log_spruce
+SetColor( 17, 14, 0xffcecec9); //                   log log_birch
+SetColor( 17, 15, 0xff57431a); //                   log log_jungle
+SetColor( 18,  0, 0xf0007900); // MANUAL leaf
+SetColor( 19,  0, 0xffb6b639); //                sponge sponge
+SetColor( 20,  0, 0x463c4243); //                 glass glass
+SetColor( 21,  0, 0xff667086); //             lapis_ore lapis_ore
+SetColor( 22,  0, 0xff264389); //           lapis_block lapis_block
+SetColor( 23,  0, 0xff606060); //             dispenser furnace_top
+SetColor( 24,  0, 0xffdad29e); //             sandstone sandstone_top
+SetColor( 25,  0, 0xff644332); //             noteblock noteblock
+SetColor( 26,  0, 0xff8e1616); //                   bed bed_feet_top
+SetColor( 27,  0, 0xab584830); //           golden_rail rail_golden
+SetColor( 28,  0, 0x9b493d36); //         detector_rail rail_detector
+SetColor( 29,  0, 0xff6a665f); //         sticky_piston piston_side
+SetColor( 30,  0, 0x685a5a5a); //                   web web
+SetColor( 31,  0, 0x20271908); // MANUAL deadbush
+SetColor( 31,  1, 0x207cae36); // MANUAL tallgrass
+SetColor( 31,  2, 0x207cae36); // MANUAL fern
+SetColor( 32,  0, 0x20271908); // MANUAL       deadbush deadbush
+SetColor( 33,  0, 0xff6a665f); //                piston piston_side
+SetColor( 35,  0, 0xff191616); //                  wool wool_colored_black
+SetColor( 35,  1, 0xff2e388d); //                  wool wool_colored_blue
+SetColor( 35,  2, 0xff4f321f); //                  wool wool_colored_brown
+SetColor( 35,  3, 0xff2e6e89); //                  wool wool_colored_cyan
+SetColor( 35,  4, 0xff404040); //                  wool wool_colored_gray
+SetColor( 35,  5, 0xff35461b); //                  wool wool_colored_green
+SetColor( 35,  6, 0xff6a8ac9); //                  wool wool_colored_light_blue
+SetColor( 35,  7, 0xff41ae38); //                  wool wool_colored_lime
+SetColor( 35,  8, 0xffb350bc); //                  wool wool_colored_magenta
+SetColor( 35,  9, 0xffdb7d3e); //                  wool wool_colored_orange
+SetColor( 35, 10, 0xffd08499); //                  wool wool_colored_pink
+SetColor( 35, 11, 0xff7e3db5); //                  wool wool_colored_purple
+SetColor( 35, 12, 0xff963430); //                  wool wool_colored_red
+SetColor( 35, 13, 0xff9aa1a1); //                  wool wool_colored_silver
+SetColor( 35, 14, 0xffdddddd); //                  wool wool_colored_white
+SetColor( 35, 15, 0xffb1a627); //                  wool wool_colored_yellow
+SetColor( 39,  0, 0x190e0a08); //        brown_mushroom mushroom_brown
+SetColor( 40,  0, 0x21190707); //          red_mushroom mushroom_red
+SetColor( 41,  0, 0xfff9ec4e); //            gold_block gold_block
+SetColor( 42,  0, 0xffdbdbdb); //            iron_block iron_block
+SetColor( 43,  0, 0xff9f9f9f); //     double_stone_slab stone_slab_top
+SetColor( 43,  1, 0xffdad29e); //     double_stone_slab sandstone_top
+SetColor( 43,  2, 0xff9c7f4e); //     double_stone_slab planks_oak
+SetColor( 43,  3, 0xff7a7a7a); //     double_stone_slab cobblestone
+SetColor( 43,  4, 0xff926356); //     double_stone_slab brick
+SetColor( 43,  5, 0xff7a7a7a); //     double_stone_slab stonebrick
+SetColor( 43,  6, 0xff2c161a); //     double_stone_slab nether_brick
+SetColor( 43,  7, 0xffece9e2); //     double_stone_slab quartz_block_top
+SetColor( 43,  8, 0xff9f9f9f); //     double_stone_slab stone_slab_top
+SetColor( 43,  9, 0xffdad29e); //     double_stone_slab sandstone_top
+SetColor( 43, 10, 0xff9c7f4e); //     double_stone_slab planks_oak
+SetColor( 43, 11, 0xff7a7a7a); //     double_stone_slab cobblestone
+SetColor( 43, 12, 0xff926356); //     double_stone_slab brick
+SetColor( 43, 13, 0xff7a7a7a); //     double_stone_slab stonebrick
+SetColor( 43, 14, 0xff2c161a); //     double_stone_slab nether_brick
+SetColor( 43, 15, 0xffece9e2); //     double_stone_slab quartz_block_top
+SetColor( 44,  0, 0xff9f9f9f); //            stone_slab stone_slab_top
+SetColor( 44,  1, 0xffdad29e); //            stone_slab sandstone_top
+SetColor( 44,  2, 0xff9c7f4e); //            stone_slab planks_oak
+SetColor( 44,  3, 0xff7a7a7a); //            stone_slab cobblestone
+SetColor( 44,  4, 0xff926356); //            stone_slab brick
+SetColor( 44,  5, 0xff7a7a7a); //            stone_slab stonebrick
+SetColor( 44,  6, 0xff2c161a); //            stone_slab nether_brick
+SetColor( 44,  7, 0xffece9e2); //            stone_slab quartz_block_top
+SetColor( 44,  8, 0xff9f9f9f); //            stone_slab stone_slab_top
+SetColor( 44,  9, 0xffdad29e); //            stone_slab sandstone_top
+SetColor( 44, 10, 0xff9c7f4e); //            stone_slab planks_oak
+SetColor( 44, 11, 0xff7a7a7a); //            stone_slab cobblestone
+SetColor( 44, 12, 0xff926356); //            stone_slab brick
+SetColor( 44, 13, 0xff7a7a7a); //            stone_slab stonebrick
+SetColor( 44, 14, 0xff2c161a); //            stone_slab nether_brick
+SetColor( 44, 15, 0xffece9e2); //            stone_slab quartz_block_top
+SetColor( 45,  0, 0xff926356); //           brick_block brick
+SetColor( 46,  0, 0xffaa4d33); //                   tnt tnt_bottom
+SetColor( 47,  0, 0xff9c7f4e); // MANUAL bookshelf
+SetColor( 48,  0, 0xff677967); //     mossy_cobblestone cobblestone_mossy
+SetColor( 49,  0, 0xff14121d); //              obsidian obsidian
+SetColor( 50,  0, 0x130a0804); //                 torch torch_on
+SetColor( 51,  0, 0x9179511e); //                  fire fire_layer_0
+SetColor( 52,  0, 0x9b10181d); //           mob_spawner mob_spawner
+SetColor( 53,  0, 0xff9c7f4e); //            oak_stairs planks_oak
+SetColor( 54,  0, 0xf0655130); // MANUAL chest
+SetColor( 56,  0, 0xff818c8f); //           diamond_ore diamond_ore
+SetColor( 57,  0, 0xff61dbd5); //         diamond_block diamond_block
+SetColor( 58,  0, 0xff6b472a); //        crafting_table crafting_table_top
+SetColor( 59,  0, 0xffa88b10); //                 wheat hay_block_top
+SetColor( 60,  0, 0xff734b2d); //              farmland farmland_dry
+SetColor( 61,  0, 0xff606060); //               furnace furnace_top
+SetColor( 62,  0, 0xff606060); //           lit_furnace furnace_top
+SetColor( 63,  0, 0x30655130); // MANUAL sign
+SetColor( 64,  0, 0x406d532a); // MANUAL    wooden_door door_wood_upper
+SetColor( 65,  0, 0x8f44351d); //                ladder ladder
+SetColor( 66,  0, 0x8f443d31); //                  rail rail_normal
+SetColor( 67,  0, 0xff7a7a7a); //          stone_stairs cobblestone
+SetColor( 68,  0, 0x30655130); // MANUAL sign
+SetColor( 70,  0, 0xff7d7d7d); //  stone_pressure_plate stone
+SetColor( 71,  0, 0xcf979797); //             iron_door door_iron_upper
+SetColor( 72,  0, 0xff9c7f4e); // wooden_pressure_plate planks_oak
+SetColor( 73,  0, 0xff846b6b); //          redstone_ore redstone_ore
+SetColor( 74,  0, 0xff846b6b); //      lit_redstone_ore redstone_ore
+SetColor( 78,  0, 0xffeffbfb); //            snow_layer snow
+SetColor( 79,  0, 0x63304363); //                   ice ice
+SetColor( 80,  0, 0xffeffbfb); //                  snow snow
+SetColor( 81,  0, 0xc30a4c12); //                cactus cactus_top
+SetColor( 82,  0, 0xff9ea4b0); //                  clay clay
+SetColor( 83,  0, 0x8c516a37); //                 reeds reeds
+SetColor( 84,  0, 0xff6b4937); //               jukebox jukebox_top
+SetColor( 85,  0, 0xff9c7f4e); //                 fence planks_oak
+SetColor( 86,  0, 0xffc07615); //               pumpkin pumpkin_top
+SetColor( 87,  0, 0xff6f3634); //            netherrack netherrack
+SetColor( 88,  0, 0xff544033); //             soul_sand soul_sand
+SetColor( 89,  0, 0xff8f7645); //             glowstone glowstone
+SetColor( 90,  0, 0x9135086f); //                portal portal
+SetColor( 91,  0, 0xffc07615); //           lit_pumpkin pumpkin_top
+SetColor( 92,  0, 0xc3af9d9e); //                  cake cake_top
+SetColor( 93,  0, 0xff979393); //    unpowered_repeater repeater_off
+SetColor( 94,  0, 0xffa09393); //      powered_repeater repeater_on
+SetColor( 95,  0, 0x3f060606); //         stained_glass glass_black
+SetColor( 95,  1, 0x3f0c122c); //         stained_glass glass_blue
+SetColor( 95,  2, 0x3f19120c); //         stained_glass glass_brown
+SetColor( 95,  3, 0x3f121f25); //         stained_glass glass_cyan
+SetColor( 95,  4, 0x3f121212); //         stained_glass glass_gray
+SetColor( 95,  5, 0x3f191f0c); //         stained_glass glass_green
+SetColor( 95,  6, 0x3f192535); //         stained_glass glass_light_blue
+SetColor( 95,  7, 0x3f1f3206); //         stained_glass glass_lime
+SetColor( 95,  8, 0x3f2c1235); //         stained_glass glass_magenta
+SetColor( 95,  9, 0x3f351f0c); //         stained_glass glass_orange
+SetColor( 95, 10, 0x3f3b1f28); //         stained_glass glass_pink
+SetColor( 95, 11, 0x3f1f0f2c); //         stained_glass glass_purple
+SetColor( 95, 12, 0x3f250c0c); //         stained_glass glass_red
+SetColor( 95, 13, 0x3f252525); //         stained_glass glass_silver
+SetColor( 95, 14, 0x3f3f3f3f); //         stained_glass glass_white
+SetColor( 95, 15, 0x3f38380c); //         stained_glass glass_yellow
+SetColor( 96,  0, 0xdb6c5027); //              trapdoor trapdoor
+SetColor( 97,  0, 0xff7d7d7d); //           monster_egg stone
+SetColor( 97,  1, 0xff7a7a7a); //           monster_egg cobblestone
+SetColor( 97,  2, 0xff7a7a7a); //           monster_egg stonebrick
+SetColor( 97,  3, 0xff72776a); //           monster_egg stonebrick_mossy
+SetColor( 97,  4, 0xff767676); //           monster_egg stonebrick_cracked
+SetColor( 97,  5, 0xff767676); //           monster_egg stonebrick_carved
+SetColor( 98,  0, 0xff7a7a7a); //            stonebrick stonebrick
+SetColor( 98,  1, 0xff72776a); //            stonebrick stonebrick_mossy
+SetColor( 98,  2, 0xff767676); //            stonebrick stonebrick_cracked
+SetColor( 98,  3, 0xff767676); //            stonebrick stonebrick_carved
+SetColor( 99,  0, 0xff8d6a53); //  brown_mushroom_block mushroom_block_skin_brown
+SetColor(100,  0, 0xffb62524); //    red_mushroom_block mushroom_block_skin_red
+SetColor(101,  0, 0x73313130); //             iron_bars iron_bars
+SetColor(102,  0, 0x1f1a1d1e); //            glass_pane glass_pane_top
+SetColor(103,  0, 0xff979924); //           melon_block melon_top
+SetColor(106,  0, 0x51007900); // MANUAL vines
+SetColor(107,  0, 0xff9c7f4e); //            fence_gate planks_oak
+SetColor(108,  0, 0xff926356); //          brick_stairs brick
+SetColor(109,  0, 0xff7a7a7a); //    stone_brick_stairs stonebrick
+SetColor(110,  0, 0xff6f6369); //              mycelium mycelium_top
+SetColor(112,  0, 0xff2c161a); //          nether_brick nether_brick
+SetColor(113,  0, 0xff2c161a); //    nether_brick_fence nether_brick
+SetColor(114,  0, 0xff2c161a); //   nether_brick_stairs nether_brick
+SetColor(115,  0, 0xcc590e0d); //           nether_wart nether_wart_stage_2
+SetColor(116,  0, 0xff67403b); //      enchanting_table enchanting_table_top
+SetColor(117,  0, 0xff6a6a6a); //         brewing_stand brewing_stand_base
+SetColor(118,  0, 0xff373737); //              cauldron cauldron_inner
+SetColor(119,  0, 0xff191919); // MANUAL end_portal
+SetColor(120,  0, 0xff597560); //      end_portal_frame endframe_top
+SetColor(121,  0, 0xffdddfa5); //             end_stone end_stone
+SetColor(122,  0, 0xff0c090f); //            dragon_egg dragon_egg
+SetColor(123,  0, 0xff462b1a); //         redstone_lamp redstone_lamp_off
+SetColor(124,  0, 0xff775937); //     lit_redstone_lamp redstone_lamp_on
+SetColor(125,  0, 0xff9c7f4e); //    double_wooden_slab planks_oak
+SetColor(125,  1, 0xff674d2e); //    double_wooden_slab planks_spruce
+SetColor(125,  2, 0xffc3b37b); //    double_wooden_slab planks_birch
+SetColor(125,  3, 0xff9a6e4d); //    double_wooden_slab planks_jungle
+SetColor(125,  4, 0xffa95b33); //    double_wooden_slab planks_acacia
+SetColor(125,  5, 0xff3d2712); //    double_wooden_slab planks_big_oak
+SetColor(125,  8, 0xff9c7f4e); //    double_wooden_slab planks_oak
+SetColor(125,  9, 0xff674d2e); //    double_wooden_slab planks_spruce
+SetColor(125, 10, 0xffc3b37b); //    double_wooden_slab planks_birch
+SetColor(125, 11, 0xff9a6e4d); //    double_wooden_slab planks_jungle
+SetColor(125, 12, 0xffa95b33); //    double_wooden_slab planks_acacia
+SetColor(125, 13, 0xff3d2712); //    double_wooden_slab planks_big_oak
+SetColor(126,  0, 0xff9c7f4e); //           wooden_slab planks_oak
+SetColor(126,  1, 0xff674d2e); //           wooden_slab planks_spruce
+SetColor(126,  2, 0xffc3b37b); //           wooden_slab planks_birch
+SetColor(126,  3, 0xff9a6e4d); //           wooden_slab planks_jungle
+SetColor(126,  4, 0xffa95b33); //           wooden_slab planks_acacia
+SetColor(126,  5, 0xff3d2712); //           wooden_slab planks_big_oak
+SetColor(126,  8, 0xff9c7f4e); //           wooden_slab planks_oak
+SetColor(126,  9, 0xff674d2e); //           wooden_slab planks_spruce
+SetColor(126, 10, 0xffc3b37b); //           wooden_slab planks_birch
+SetColor(126, 11, 0xff9a6e4d); //           wooden_slab planks_jungle
+SetColor(126, 12, 0xffa95b33); //           wooden_slab planks_acacia
+SetColor(126, 13, 0xff3d2712); //           wooden_slab planks_big_oak
+SetColor(127,  0, 0x834b290f); //                 cocoa cocoa_stage_2
+SetColor(128,  0, 0xffdad29e); //      sandstone_stairs sandstone_top
+SetColor(129,  0, 0xff6d8074); //           emerald_ore emerald_ore
+SetColor(130,  0, 0xf06d6d6d); // MANUAL enderchest
+SetColor(133,  0, 0xff51d975); //         emerald_block emerald_block
+SetColor(134,  0, 0xff674d2e); //         spruce_stairs planks_spruce
+SetColor(135,  0, 0xffc3b37b); //          birch_stairs planks_birch
+SetColor(136,  0, 0xff9a6e4d); //         jungle_stairs planks_jungle
+SetColor(137,  0, 0xffb2896f); //         command_block command_block
+SetColor(138,  0, 0xff74ddd7); //                beacon beacon
+SetColor(139,  0, 0xff7a7a7a); //      cobblestone_wall cobblestone
+SetColor(140,  0, 0x31170c0a); //            flower_pot flower_pot
+SetColor(141,  0, 0x6f093801); //               carrots carrots_stage_3
+SetColor(142,  0, 0x690e460e); //              potatoes potatoes_stage_3
+SetColor(145,  0, 0x9f282525); //                 anvil anvil_top_damaged_0
+SetColor(146,  0, 0xf0655130); // MANUAL trapped_chest
+SetColor(147,  0, 0xfff9ec4e); // light_weighted_pressure_plate gold_block
+SetColor(148,  0, 0xffdbdbdb); // heavy_weighted_pressure_plate iron_block
+SetColor(149,  0, 0xff9c9695); //  unpowered_comparator comparator_off
+SetColor(150,  0, 0xffa59594); //    powered_comparator comparator_on
+SetColor(151,  0, 0xff82745e); //     daylight_detector daylight_detector_top
+SetColor(152,  0, 0xffab1b09); //        redstone_block redstone_block
+SetColor(153,  0, 0xff7d544f); //            quartz_ore quartz_ore
+SetColor(154,  0, 0xff3e3e3e); //                hopper hopper_outside
+SetColor(155,  0, 0xffece9e2); //          quartz_block quartz_block_top
+SetColor(156,  0, 0xffece9e2); //         quartz_stairs quartz_block_top
+SetColor(157,  0, 0x9b3f322b); //        activator_rail rail_activator
+SetColor(158,  0, 0xff606060); //               dropper furnace_top
+SetColor(159,  0, 0xff251610); // stained_hardened_clay hardened_clay_stained_black
+SetColor(159,  1, 0xff4a3b5b); // stained_hardened_clay hardened_clay_stained_blue
+SetColor(159,  2, 0xff4d3323); // stained_hardened_clay hardened_clay_stained_brown
+SetColor(159,  3, 0xff565b5b); // stained_hardened_clay hardened_clay_stained_cyan
+SetColor(159,  4, 0xff392a23); // stained_hardened_clay hardened_clay_stained_gray
+SetColor(159,  5, 0xff4c532a); // stained_hardened_clay hardened_clay_stained_green
+SetColor(159,  6, 0xff716c89); // stained_hardened_clay hardened_clay_stained_light_blue
+SetColor(159,  7, 0xff677534); // stained_hardened_clay hardened_clay_stained_lime
+SetColor(159,  8, 0xff95586c); // stained_hardened_clay hardened_clay_stained_magenta
+SetColor(159,  9, 0xffa15325); // stained_hardened_clay hardened_clay_stained_orange
+SetColor(159, 10, 0xffa14e4e); // stained_hardened_clay hardened_clay_stained_pink
+SetColor(159, 11, 0xff764656); // stained_hardened_clay hardened_clay_stained_purple
+SetColor(159, 12, 0xff8f3d2e); // stained_hardened_clay hardened_clay_stained_red
+SetColor(159, 13, 0xff876a61); // stained_hardened_clay hardened_clay_stained_silver
+SetColor(159, 14, 0xffd1b2a1); // stained_hardened_clay hardened_clay_stained_white
+SetColor(159, 15, 0xffba8523); // stained_hardened_clay hardened_clay_stained_yellow
+SetColor(160,  0, 0x19020202); //    stained_glass_pane glass_pane_top_black
+SetColor(160,  1, 0x19040711); //    stained_glass_pane glass_pane_top_blue
+SetColor(160,  2, 0x19090704); //    stained_glass_pane glass_pane_top_brown
+SetColor(160,  3, 0x19070c0e); //    stained_glass_pane glass_pane_top_cyan
+SetColor(160,  4, 0x19070707); //    stained_glass_pane glass_pane_top_gray
+SetColor(160,  5, 0x19090c04); //    stained_glass_pane glass_pane_top_green
+SetColor(160,  6, 0x19090e15); //    stained_glass_pane glass_pane_top_light_blue
+SetColor(160,  7, 0x190c1302); //    stained_glass_pane glass_pane_top_lime
+SetColor(160,  8, 0x19110715); //    stained_glass_pane glass_pane_top_magenta
+SetColor(160,  9, 0x19150c04); //    stained_glass_pane glass_pane_top_orange
+SetColor(160, 10, 0x19170c10); //    stained_glass_pane glass_pane_top_pink
+SetColor(160, 11, 0x190c0611); //    stained_glass_pane glass_pane_top_purple
+SetColor(160, 12, 0x190e0404); //    stained_glass_pane glass_pane_top_red
+SetColor(160, 13, 0x190e0e0e); //    stained_glass_pane glass_pane_top_silver
+SetColor(160, 14, 0x19191919); //    stained_glass_pane glass_pane_top_white
+SetColor(160, 15, 0x19161604); //    stained_glass_pane glass_pane_top_yellow
+SetColor(161,  0, 0xf0007900); // MANUAL leaf
+SetColor(162,  0, 0xff9a5b40); //                  log2 log_acacia_top
+SetColor(162,  1, 0xff4e3e29); //                  log2 log_big_oak_top
+SetColor(162,  2, 0xff9a5b40); //                  log2 log_acacia_top
+SetColor(162,  3, 0xff4e3e29); //                  log2 log_big_oak_top
+SetColor(162,  4, 0xff696359); //                  log2 log_acacia
+SetColor(162,  5, 0xff342817); //                  log2 log_big_oak
+SetColor(162,  6, 0xff696359); //                  log2 log_acacia
+SetColor(162,  7, 0xff342817); //                  log2 log_big_oak
+SetColor(162,  8, 0xff696359); //                  log2 log_acacia
+SetColor(162,  9, 0xff342817); //                  log2 log_big_oak
+SetColor(162, 10, 0xff696359); //                  log2 log_acacia
+SetColor(162, 11, 0xff342817); //                  log2 log_big_oak
+SetColor(162, 12, 0xff696359); //                  log2 log_acacia
+SetColor(162, 13, 0xff342817); //                  log2 log_big_oak
+SetColor(162, 14, 0xff696359); //                  log2 log_acacia
+SetColor(162, 15, 0xff342817); //                  log2 log_big_oak
+SetColor(163,  0, 0xffa95b33); //         acacia_stairs planks_acacia
+SetColor(164,  0, 0xff3d2712); //       dark_oak_stairs planks_big_oak
+SetColor(170,  0, 0xffa88b10); //             hay_block hay_block_top
+SetColor(171,  0, 0xff191616); //                carpet wool_colored_black
+SetColor(171,  1, 0xff2e388d); //                carpet wool_colored_blue
+SetColor(171,  2, 0xff4f321f); //                carpet wool_colored_brown
+SetColor(171,  3, 0xff2e6e89); //                carpet wool_colored_cyan
+SetColor(171,  4, 0xff404040); //                carpet wool_colored_gray
+SetColor(171,  5, 0xff35461b); //                carpet wool_colored_green
+SetColor(171,  6, 0xff6a8ac9); //                carpet wool_colored_light_blue
+SetColor(171,  7, 0xff41ae38); //                carpet wool_colored_lime
+SetColor(171,  8, 0xffb350bc); //                carpet wool_colored_magenta
+SetColor(171,  9, 0xffdb7d3e); //                carpet wool_colored_orange
+SetColor(171, 10, 0xffd08499); //                carpet wool_colored_pink
+SetColor(171, 11, 0xff7e3db5); //                carpet wool_colored_purple
+SetColor(171, 12, 0xff963430); //                carpet wool_colored_red
+SetColor(171, 13, 0xff9aa1a1); //                carpet wool_colored_silver
+SetColor(171, 14, 0xffdddddd); //                carpet wool_colored_white
+SetColor(171, 15, 0xffb1a627); //                carpet wool_colored_yellow
+SetColor(172,  0, 0xff965c42); //         hardened_clay hardened_clay
+SetColor(173,  0, 0xff121212); //            coal_block coal_block
+SetColor(174,  0, 0xffa5c2f5); //            packed_ice ice_packed
 

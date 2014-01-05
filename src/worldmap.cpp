@@ -1,9 +1,10 @@
 /* worldmap.cpp
  *
  * Takes a minecraft world path and renders the map into "worldmap.png".
- * Rendered are widthxheight blocks around the center, each block zoomxzoom pixel large.
+ * Rendered are width by height blocks around the center, each block zoom by zoom pixels large.
  * Optionally prints center x, center z, width, and height of the map.
- * The current color data is from the ingame map renderer, slightly adjusted by me.
+ * The current color data is from the default texture pack, slightly adjusted by me.
+ * The renderer even calculates block transparency and does a bit of height mapping.
  *
  * Arguments: <worldpath> [center x=0] [center z=0] [width=256] [height=256] [zoom=1] [info text size=10]
  *
@@ -37,55 +38,42 @@
 #include <cairo/cairo.h>
 #include "nbt/Tag.h"
 
+const unsigned char heightMappingDarknessPercent = 95;
+
 typedef int32_t BlockColor;
 
-BlockColor * blockColors[4096]; // 2^(8+4), id has 8 bit, meta has 4 bit
-BlockColor * blockColorsDark[4096];
+BlockColor blockColors[4096]; // 2^(8+4), id has 8 bit, meta has 4 bit
 
 int blockColorID(int id, int meta) {
     return id | (meta << 8);
 }
 
-void SetColor(unsigned char id, unsigned char meta, unsigned int value) {
-    BlockColor * color = new BlockColor;
-    *color = 0xff000000 | value;
-    blockColors[blockColorID(id, meta)] = color;
-
-    // darker color
-    unsigned char * colorDark = new unsigned char[4];
-    colorDark[3] = 0xff;
-    colorDark[2] = ((value >> 16) & 0xff) * 95 / 100;
-    colorDark[1] = ((value >> 8)  & 0xff) * 95 / 100;
-    colorDark[0] = ( value        & 0xff) * 95 / 100;
-    blockColorsDark[blockColorID(id, meta)] = (BlockColor *) colorDark;
+void SetColor(unsigned char id, unsigned char meta, BlockColor value) {
+    blockColors[blockColorID(id, meta)] = value;
 }
 
 void buildColorTable() {
     for (unsigned int i = 0; i < 4096; i++) {
-        blockColors[i] = NULL;
-        blockColorsDark[i] = NULL;
+        blockColors[i] = 0;
     }
     // too many colors, I put them in an extra file
     // they are included at compile time
 #include "MapColors.txt"
 }
 
-BlockColor * blockColorOf(int id, int meta) {
+BlockColor blockColorOf(int id, int meta) {
     return blockColors[blockColorID(id, meta)];
 }
-BlockColor * darkBlockColorOf(int id, int meta) {
-    return blockColorsDark[blockColorID(id, meta)];
-}
 
-void drawChunkOnMap(cairo_surface_t * surface, BlockColor * chunkColors[], int x, int z, int zoom) {
+void drawChunkOnMap(cairo_surface_t * surface, BlockColor chunkColors[], int x, int z, int zoom) {
     cairo_surface_flush(surface);
-    int32_t * imgdata = (int32_t *) cairo_image_surface_get_data(surface);
+    BlockColor * imgdata = (BlockColor *) cairo_image_surface_get_data(surface);
     int imgwidth  = cairo_image_surface_get_width(surface);
     int imgheight = cairo_image_surface_get_height(surface);
     for (int i = 0; i < 16*16; i++) { // all blocks in chunk
-        if (chunkColors[i] == NULL) {
-            //printf("Rendering: Tried to render empty block, chunk %i,%i block %i\n", chunkx, chunkz, i);
-            continue; // error or transparent (no block)
+        if (chunkColors[i] == 0) {
+            //printf("Rendering: Tried to render air block, chunk %i,%i block %i, color %x\n", x, z, i, chunkColors[i]);
+            continue; // air block
         }
         int imgx = (i%16)*zoom + x;
         int imgy = (i/16)*zoom + z;
@@ -94,13 +82,13 @@ void drawChunkOnMap(cairo_surface_t * surface, BlockColor * chunkColors[], int x
         }
         int imgIndex = imgx + imgy*imgwidth;
         for (int j = 0; j < zoom*zoom; j++) // rectangle for one block
-            imgdata[imgIndex + j%zoom+(j/zoom)*imgwidth] = *chunkColors[i];
+            imgdata[imgIndex + j%zoom+(j/zoom)*imgwidth] = chunkColors[i];
     }
     cairo_surface_mark_dirty_rectangle(surface, x, z, 16*zoom, 16*zoom);
 }
 
-void getColorsFromChunk(NBT::Tag * level, BlockColor ** chunkColors) {
-    for (int i = 0; i < 16*16; i++) chunkColors[i] = NULL;
+void getColorsFromChunk(NBT::Tag * level, BlockColor chunkColors[]) {
+    for (int i = 0; i < 16*16; i++) chunkColors[i] = 0; // clear all colors
     unsigned int colorsFound = 0; // for quick stopping
     // search all sections, begin at the top (assuming they are sorted)
     // loop breaks when all 16*16 visible blocks have been found
@@ -111,28 +99,56 @@ void getColorsFromChunk(NBT::Tag * level, BlockColor ** chunkColors) {
         NBT::Tag * ids = section->getSubTag("Blocks");
         NBT::Tag * metas = section->getSubTag("Data");
         // search all blocks in section, begin at the top
-        for (int i = 16*16*16-1; i >= 0; i--) {
-            if (chunkColors[i%(16*16)] != NULL) continue; // skip if already found a block here
-            unsigned char id = ids->getListItemAsInt(i);
+        for (int b = 16*16*16-1; b >= 0; b--) {
+            BlockColor oldColor = chunkColors[b%(16*16)];
+            if (oldColor >= 0xff000000) continue; // skip, we are already opaque
+            unsigned char id = ids->getListItemAsInt(b);
             if (id == 0) continue; // quick jump for air
-            unsigned char meta = (metas->getListItemAsInt(i/2) >> (i%2)*4) & 0x0F;
-            BlockColor * color = blockColorOf(id, meta);
+            unsigned char meta = (metas->getListItemAsInt(b/2) >> (b%2)*4) & 0x0F;
+            BlockColor newColor = blockColorOf(id, meta);
             // error handling
-            if (color == NULL) {
-                // could not find the color, although there are blocks
-                // unknown metadata? fallback to meta=0
-                color = blockColorOf(id, meta = 0); // set meta if dark color is used later
-                if (color == NULL) {
-                    // unknown block id and meta? render transparent
+            if (newColor == 0) {
+                // could not find the color, although there is a block here
+                // maybe only metadata is unknown? try meta=0
+                newColor = blockColorOf(id, 0);
+                if (newColor == 0) {
+                    // unknown block id and meta? get block below
                     //printf("colorAt: Didn't get color: block %3i:%i\n", id, meta);
                     continue;
                 }
             }
-            // heightmap visualization
-            if ((i/256)%2 == 0) color = darkBlockColorOf(id, meta);
+            if (oldColor == 0) {
+                // first time coloring
+                // heightmap visualization
+                if ((b/256)%2 == 0) {
+                    // darker color
+                    unsigned char * colorArray = (unsigned char *) &newColor;
+                    colorArray[0] = (int)colorArray[0] * heightMappingDarknessPercent / 100;
+                    colorArray[1] = (int)colorArray[1] * heightMappingDarknessPercent / 100;
+                    colorArray[2] = (int)colorArray[2] * heightMappingDarknessPercent / 100;
+                }
+            }
+            else {
+                // we do not have full opacity yet
+                // combine block color and current color (transparent)
+                unsigned char * oldArray = (unsigned char *) &oldColor;
+                unsigned char * newArray = (unsigned char *) &newColor;
+                int c = (int(newArray[3]) * int(0xff - oldArray[3]) + oldArray[3] * 0xff) / 0xff;
+                if (c > 0xff) c = 0xff;
+                newArray[3] = c;
+                for (int i = 0; i < 3; i++) {
+                    int c = (int(newArray[i]) * int(0xff - oldArray[3]) + oldArray[i] * oldArray[3]) / 0xff;
+                    if (c > 0xff) c = 0xff;
+                    newArray[i] = c;
+                }
+            }
+            // are we done already?
+            if (newColor >= 0xff000000) {
+                colorsFound++;
+            }
             // save color and go to next block
-            chunkColors[i%(16*16)] = color;
-            if (++colorsFound >= 16*16) break;
+            chunkColors[b%(16*16)] = newColor;
+            if (colorsFound >= 16*16) break;
         }
         delete section; // because we allocate memory when extracting list items as tags
         if (colorsFound >= 16*16) break;
@@ -183,7 +199,7 @@ int main(int argc, char* argv[]) {
                 delete chunk;
                 continue;
             }
-            BlockColor * chunkColors[16*16];
+            BlockColor chunkColors[16*16];
             getColorsFromChunk(level, chunkColors);
             omp_set_lock(&lck);
             drawChunkOnMap(surface, chunkColors, (chunkx*16-left)*zoom, (chunkz*16-top)*zoom, zoom);

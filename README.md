@@ -57,9 +57,10 @@ Prints the content of `bigtest.nbt`, which is too long and can be found here: <h
 ####`worldmap.cpp`
 
 Takes a minecraft world path and renders the map into `worldmap.png`.
-Rendered are `width`x`height` blocks around the `center`, each block `zoom`x`zoom` pixel large.
+Rendered are `width` by `height` blocks around the `center`, each block `zoom` by `zoom` pixels large.
 Optionally prints `center x`, `center z`, `width`, and `height` of the map.
-The current color data is from the ingame map renderer, slightly adjusted by me.
+The current color data is from the default texture pack, slightly adjusted by me.
+The renderer even calculates block transparency and does a bit of height mapping.
 
 **Arguments:**
 

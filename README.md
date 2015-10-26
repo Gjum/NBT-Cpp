@@ -32,27 +32,7 @@ To do list
 Included programs
 -----------------
 
-
-####`main.cpp`
-
-Prints a json-like tree of the provided file.
-Supports uncompressed and gzip compressed files.
-
-**Arguments:**
-
-`<path/to/file> [tag path=""]`
-
-- `path/to/file`: The file to load the tag from.
-    - Example: `testdata/bigtest.nbt`
-- `tag path`: The path to the tag that will be printed.
-    - Example: `nested compound test.ham.name`
-
-**Example:**
-
-`main bigtest.nbt`
-
-Prints the content of `bigtest.nbt`, which is too long and can be found here: <http://wiki.vg/NBT#bigtest.nbt>
-
+![worldmap example](http://lunarco.de/minecraft/nbt-worldmap_Songburrow_+450-2050_500x700_2x2.png)
 
 ####`worldmap.cpp`
 
@@ -89,6 +69,27 @@ Renders `saves/Legio-Umbra/` with `5x5` block size and prints various data in fo
 The image contains all blocks from 200,-632 to 799,-231.
 
 
+####`main.cpp`
+
+Prints a json-like tree of the provided file.
+Supports uncompressed and gzip compressed files.
+
+**Arguments:**
+
+`<path/to/file> [tag path=""]`
+
+- `path/to/file`: The file to load the tag from.
+    - Example: `testdata/bigtest.nbt`
+- `tag path`: The path to the tag that will be printed.
+    - Example: `nested compound test.ham.name`
+
+**Example:**
+
+`main bigtest.nbt`
+
+Prints the content of `bigtest.nbt`, which is too long and can be found here: <http://wiki.vg/NBT#bigtest.nbt>
+
+
 ####`map.cpp`
 
 Takes a minecraft world path and map id and renders the map item into `map_#.png`.
@@ -113,3 +114,15 @@ Optionally prints `scale`, `dimension`, `xCenter` and `zCenter` of the map.
 
 Renders `saves/Legio-Umbra/data/map_4.dat` with `5x5` pixel size and prints various map data in font size `12`.
 
+---
+
+Copyright (c) 2015, Gjum <code.gjum@gmail.com>
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
